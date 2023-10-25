@@ -6,7 +6,7 @@ from typing import Any, Sequence, ContextManager
 
 import cv2
 import numpy as np
-from PyQt6.QtGui import QImage, QPixmap
+from PySide6.QtGui import QImage, QPixmap
 
 
 @dataclass
