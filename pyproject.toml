@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "timelaps"
+version = "0.1.0"
+description = ""
+authors = ["Stepan Anokhin <stepan.anokhin@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.13"
+pyqt6 = "^6.5.3"
+opencv-python-headless = "^4.8.1.78"
+pyside6 = "^6.6.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
