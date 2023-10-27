@@ -7,6 +7,7 @@ from timelapse.config import TimelapseConfig
 from timelapse.dummy import DummyCamera
 from timelapse.model import Camera
 from timelapse.opencv import OpenCVCameraProvider
+from timelapse.ui.capturer import Capturer
 from timelapse.ui.configurer import Configurer
 
 
@@ -20,6 +21,7 @@ class MainWindow(QMainWindow):
 
         self._layout = QVBoxLayout()
 
+        self._capturer: Capturer | None = None
         self._configurer = Configurer(self.config)
         self._configurer.config_changed.connect(self.update_config)
         self._configurer.config_done.connect(self._start_capturing)
@@ -37,6 +39,8 @@ class MainWindow(QMainWindow):
     def _start_capturing(self):
         """Handle start frame capturing."""
         self._configurer.hide()
+        self._capturer = Capturer(self.config)
+        self._layout.addWidget(self._capturer)
 
 
 def main(qt_args: List[str]):
