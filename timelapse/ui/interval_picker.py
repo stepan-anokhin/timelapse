@@ -1,36 +1,16 @@
-from dataclasses import dataclass
 from typing import Sequence
 
 from PySide6.QtCore import Signal
 from PySide6.QtGui import QIntValidator
 from PySide6.QtWidgets import QWidget, QLabel, QLineEdit, QComboBox, QHBoxLayout
 
-
-@dataclass(frozen=True)
-class TimeUnit:
-    """Time unit description."""
-    name: str
-    millis: int
+from timelapse.model import TimeUnit, TimeUnits
 
 
-class TimeUnits:
-    """Standard time units."""
-
-    MILLIS = TimeUnit("Milliseconds", 1)
-    SEC = TimeUnit("Seconds", 1000)
-    MIN = TimeUnit("Minutes", SEC.millis * 60)
-    HOUR = TimeUnit("Hours", MIN.millis * 60)
-    DAY = TimeUnit("Days", HOUR.millis * 24)
-
-    ALL: Sequence[TimeUnit] = (
-        MILLIS, SEC, MIN, HOUR, DAY,
-    )
-
-
-class IntervalPicker(QWidget):
+class TimeIntervalPicker(QWidget):
     """Choose time interval between consequent frames."""
 
-    time_interval_changed: Signal = Signal(int)
+    interval_changed: Signal = Signal(int)
 
     def __init__(self, amount: int = 10, unit: TimeUnit = TimeUnits.SEC, units: Sequence[TimeUnit] = TimeUnits.ALL):
         super().__init__()
@@ -62,9 +42,9 @@ class IntervalPicker(QWidget):
     def _amount_changed(self, new_amount: str):
         """Handle amount changed."""
         self.amount = int(new_amount)
-        self.time_interval_changed.emit(self.amount * self.unit.millis)
+        self.interval_changed.emit(self.amount * self.unit.millis)
 
     def _unit_changed(self, index: int):
         """Handle time-unit changed."""
         self.unit = self.units[index]
-        self.time_interval_changed.emit(self.amount * self.unit.millis)
+        self.interval_changed.emit(self.amount * self.unit.millis)

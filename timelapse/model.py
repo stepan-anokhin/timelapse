@@ -75,3 +75,24 @@ class CameraProvider(abc.ABC):
     @abstractmethod
     def open_camera(self, descriptor: CameraDescriptor) -> Camera:
         """Get access to the Camera."""
+
+
+@dataclass(frozen=True)
+class TimeUnit:
+    """Time unit description."""
+    name: str
+    millis: int
+
+
+class TimeUnits:
+    """Standard time units."""
+
+    MILLIS = TimeUnit("Milliseconds", 1)
+    SEC = TimeUnit("Seconds", 1000)
+    MIN = TimeUnit("Minutes", SEC.millis * 60)
+    HOUR = TimeUnit("Hours", MIN.millis * 60)
+    DAY = TimeUnit("Days", HOUR.millis * 24)
+
+    ALL: Sequence[TimeUnit] = (
+        MILLIS, SEC, MIN, HOUR, DAY,
+    )

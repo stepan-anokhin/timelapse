@@ -1,3 +1,4 @@
+from functools import lru_cache
 from typing import Sequence, List
 
 import cv2
@@ -8,6 +9,7 @@ from timelapse.model import CameraProvider, CameraDescriptor, Camera, Frame
 class OpenCVCameraProvider(CameraProvider):
     """Camera provider based on OpenCV VideoCapture API."""
 
+    @lru_cache(1)
     def list_webcams(self) -> Sequence[CameraDescriptor]:
         """List all available cameras."""
 

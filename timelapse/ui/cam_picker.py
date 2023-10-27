@@ -1,10 +1,10 @@
 from typing import Sequence
 
 from PySide6.QtCore import Signal, QTimer
-from PySide6.QtGui import QPixmap
+from PySide6.QtGui import QPixmap, QShowEvent, QHideEvent
 from PySide6.QtWidgets import QWidget, QLayout, QVBoxLayout, QComboBox, QLabel
 
-from timelapse.dummy import DummyCamera, DummyProvider
+from timelapse.dummy import DummyCamera
 from timelapse.model import Camera, CameraProvider, CameraDescriptor
 from timelapse.ui.resources import Resources
 
@@ -12,17 +12,14 @@ from timelapse.ui.resources import Resources
 class CamPicker(QWidget):
     """Camera picker widget: camera list + video preview."""
 
-    picked: Signal
+    camera_changed: Signal = Signal(CameraDescriptor)
     camera: Camera = DummyCamera()
 
-    def __init__(self, camera_provider: CameraProvider, no_image: QPixmap = None):
+    def __init__(self, descriptor: CameraDescriptor, camera_provider: CameraProvider, no_image: QPixmap = None):
         super().__init__()
-        self.picked = Signal(CameraDescriptor, CameraProvider, name="picked")
         self.camera_provider: CameraProvider = camera_provider
         self.cameras: Sequence[CameraDescriptor] = self.camera_provider.list_webcams()
-        if len(self.cameras) == 0:
-            self.camera_provider = DummyProvider()
-            self.cameras = self.camera_provider.list_webcams()
+        self.camera = self.camera_provider.open_camera(descriptor)
         self.no_image: QPixmap = no_image or QPixmap(Resources.NO_IMAGE)
         self._timer: QTimer | None = None
         self._init_ui()
@@ -48,6 +45,7 @@ class CamPicker(QWidget):
         self.camera.close()
         descriptor = self.cameras[index]
         self.camera = self.camera_provider.open_camera(descriptor)
+        self.camera_changed.emit(descriptor)
 
     def _display_frame(self):
         """Preview frame from the camera."""
@@ -57,7 +55,7 @@ class CamPicker(QWidget):
         else:
             self._frame_container.setPixmap(self.no_image)
 
-    def start(self, period: int = 100):
+    def start_preview(self, period: int = 100):
         """Start playing video from the current camera."""
         if self._timer is not None:
             self._timer.stop()
@@ -65,7 +63,18 @@ class CamPicker(QWidget):
         self._timer.timeout.connect(self._display_frame)
         self._timer.start(period)
 
-    def stop(self):
-        """Stop playing video form the current camera."""
+    def stop_preview(self):
+        """Stop playing video from the current camera."""
         if self._timer is not None:
             self._timer.stop()
+        self.camera.close()
+
+    def showEvent(self, event: QShowEvent) -> None:
+        """Start camera preview on show()."""
+        super().showEvent(event)
+        QTimer().singleShot(500, self.start_preview)
+
+    def hideEvent(self, event: QHideEvent) -> None:
+        """Stop camera preview."""
+        super().hideEvent(event)
+        self.stop_preview()
