@@ -9,6 +9,7 @@ readme = "README.md"
 python = ">=3.10,<3.13"
 opencv-python-headless = "^4.8.1.78"
 pyside6 = "^6.6.0"
+fire = "^0.5.0"
 
 
 [build-system]
