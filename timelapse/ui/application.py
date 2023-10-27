@@ -9,6 +9,7 @@ from timelapse.model import Camera, CameraProvider
 from timelapse.opencv import OpenCVCameraProvider
 from timelapse.ui.cam_picker import CamPicker
 from timelapse.ui.interval_picker import IntervalPicker
+from timelapse.ui.path_selector import PathSelector
 
 
 class MainWindow(QMainWindow):
@@ -22,22 +23,21 @@ class MainWindow(QMainWindow):
         content = QWidget()
         layout = QVBoxLayout()
 
-        self.cam_picker = CamPicker(camera_provider)
-        layout.addWidget(self.cam_picker)
+        self._cam_picker = CamPicker(camera_provider)
+        layout.addWidget(self._cam_picker)
 
-        self.interval_picker = IntervalPicker()
-        layout.addWidget(self.interval_picker)
+        self._interval_picker = IntervalPicker()
+        layout.addWidget(self._interval_picker)
 
-        button = QPushButton("Select Directory")
-        button.clicked.connect(self.select_dir)
-        layout.addWidget(button)
+        self._path_selector = PathSelector()
+        layout.addWidget(self._path_selector)
 
-        button = QPushButton("Start Recording")
+        button = QPushButton("Поехали!")
         layout.addWidget(button)
 
         content.setLayout(layout)
         self.setCentralWidget(content)
-        QTimer().singleShot(500, self.cam_picker.start)
+        QTimer().singleShot(500, self._cam_picker.start)
 
     def select_dir(self):
         path = QFileDialog.getExistingDirectory(
