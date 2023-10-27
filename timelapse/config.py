@@ -24,4 +24,4 @@ class TimelapseConfig:
         if len(cameras) == 0:
             provider = DummyProvider()
             cameras = provider.list_webcams()
-        return TimelapseConfig(provider, cameras[0], 10 * 1000, Path.home())
+        return TimelapseConfig(provider, cameras[0], 1000, Path.home())

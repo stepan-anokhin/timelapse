@@ -12,7 +12,7 @@ class TimeIntervalPicker(QWidget):
 
     interval_changed: Signal = Signal(int)
 
-    def __init__(self, amount: int = 10, unit: TimeUnit = TimeUnits.SEC, units: Sequence[TimeUnit] = TimeUnits.ALL):
+    def __init__(self, amount: int = 1, unit: TimeUnit = TimeUnits.SEC, units: Sequence[TimeUnit] = TimeUnits.ALL):
         super().__init__()
         if unit not in units:
             raise ValueError(f"{unit} is not among known units: {units}")

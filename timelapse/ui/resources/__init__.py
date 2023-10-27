@@ -10,3 +10,4 @@ class Resources:
         return os.path.join(os.path.dirname(__file__), name)
 
     NO_IMAGE: str = path("no_image.jpg")
+    START_SOUND: str = path("start.mp4")

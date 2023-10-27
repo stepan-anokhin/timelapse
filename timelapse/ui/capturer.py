@@ -17,7 +17,7 @@ class Capturer(QWidget):
     frame_captured: Signal = Signal(Path)
     capture_done: Signal = Signal()
     _camera: Camera
-    _timer: QTimer
+    _timer: QTimer | None = None
 
     def __init__(self, config: TimelapseConfig, no_image: QPixmap = None):
         super().__init__()
@@ -55,7 +55,13 @@ class Capturer(QWidget):
     def showEvent(self, event: QShowEvent):
         """Start capturing on show."""
         super().showEvent(event)
-        QTimer().singleShot(100, self.start_capture)
+        if not self.started:
+            QTimer().singleShot(500, self.start_capture)
+
+    @property
+    def started(self) -> bool:
+        """Check if started."""
+        return self._timer is not None
 
     def start_capture(self):
         """Start capturing."""

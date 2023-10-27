@@ -1,4 +1,5 @@
 import sys
+from pathlib import Path
 from typing import List
 
 from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget
@@ -9,16 +10,19 @@ from timelapse.model import Camera
 from timelapse.opencv import OpenCVCameraProvider
 from timelapse.ui.capturer import Capturer
 from timelapse.ui.configurer import Configurer
+from timelapse.ui.resources import Resources
+from timelapse.ui.sound import play_sound_effect, play_sound
 
 
 class MainWindow(QMainWindow):
     camera: Camera = DummyCamera()
 
-    def __init__(self, initial_config: TimelapseConfig):
+    def __init__(self, initial_config: TimelapseConfig, sound: bool = False):
         super().__init__()
         self.config = initial_config
-        self.setWindowTitle("TimeLapse")
+        self.sound: bool = sound
 
+        self.setWindowTitle("TimeLapse")
         self._layout = QVBoxLayout()
 
         self._capturer: Capturer | None = None
@@ -38,6 +42,8 @@ class MainWindow(QMainWindow):
 
     def _start_capturing(self):
         """Handle start frame capturing."""
+        if self.sound:
+            play_sound(Path(Resources.START_SOUND))
         self._configurer.hide()
         self._capturer = Capturer(self.config)
         self._layout.addWidget(self._capturer)
