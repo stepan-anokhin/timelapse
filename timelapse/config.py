@@ -14,7 +14,8 @@ class TimelapseConfig:
     camera_provider: CameraProvider
     camera: CameraDescriptor
     frame_interval: int
-    destination: Path
+    destination_directory: Path
+    group_size: int = 1000
 
     @staticmethod
     def default(provider: CameraProvider) -> TimelapseConfig:

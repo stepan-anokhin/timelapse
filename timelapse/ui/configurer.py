@@ -38,7 +38,7 @@ class Configurer(QWidget):
         self._path_selector.path_changed.connect(self._path_changed)
         self._layout.addWidget(self._path_selector)
 
-        self._button = QPushButton("Поехали!")
+        self._button = QPushButton("Let's go!")
         self._button.clicked.connect(self.config_done)
         self._layout.addWidget(self._button)
 
@@ -56,5 +56,5 @@ class Configurer(QWidget):
 
     def _path_changed(self, new_path: Path):
         """Handle path changed."""
-        self.config.destination = new_path
+        self.config.destination_directory = new_path
         self.config_changed.emit(self.config)
