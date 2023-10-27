@@ -57,7 +57,7 @@ class CamPicker(QWidget):
         else:
             self._frame_container.setPixmap(self.no_image)
 
-    def start(self, period: int = 10):
+    def start(self, period: int = 100):
         """Start playing video from the current camera."""
         if self._timer is not None:
             self._timer.stop()
