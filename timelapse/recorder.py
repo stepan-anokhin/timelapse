@@ -36,10 +36,13 @@ class TimelapseRecorder:
 
     def capture_frame(self) -> Frame | None:
         """Capture a single frame."""
+        for _ in range(self.config.skip):
+            self.camera.read_frame()
         frame = self.camera.read_frame()
-        filename = f"frame_{self._timestamp()}.jpg"
-        path = self.group_folder.joinpath(filename)
-        cv2.imwrite(str(path), frame.data)
+        if frame is not None:
+            filename = f"frame_{self._timestamp()}.jpg"
+            path = self.group_folder.joinpath(filename)
+            cv2.imwrite(str(path), frame.data)
         return frame
 
     def close(self):

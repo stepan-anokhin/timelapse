@@ -16,6 +16,7 @@ class TimelapseConfig:
     frame_interval: int
     destination_directory: Path
     group_size: int = 1000
+    skip: int = 5  # May be useful to compensate frame buffering
 
     @staticmethod
     def default(provider: CameraProvider) -> TimelapseConfig:
