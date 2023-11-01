@@ -3,7 +3,7 @@ channels:
   - conda-forge
   - fastai
 dependencies:
-  - python=3.12
-  - opencv-python-headless=4.8.1.78
-  - pyside6=6.6.0
-  - fire=0.5.0
+  - python>=3.10
+  - opencv-python-headless>=4.8.1.78
+  - pyside6>=6.6.0
+  - fire>=0.5.0
