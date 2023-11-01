@@ -51,7 +51,7 @@ class CamPicker(QWidget):
         """Preview frame from the camera."""
         frame = self.camera.read_frame()
         if frame is not None:
-            self._frame_container.setPixmap(frame.to_pixmap())
+            self._frame_container.setPixmap(frame.scale(0.5).to_pixmap())
         else:
             self._frame_container.setPixmap(self.no_image)
 
