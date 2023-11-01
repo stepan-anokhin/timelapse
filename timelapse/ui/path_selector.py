@@ -45,5 +45,5 @@ class PathSelector(QWidget):
             options=QFileDialog.Option.DontUseNativeDialog,
             dir=str(self.path),
         )
-        self.path = Path(selected_path).absolute()
+        self.path = Path(selected_path or self.path).absolute()
         self.path_changed.emit(self.path)
